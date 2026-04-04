@@ -1,23 +1,22 @@
 {% extends "base.html" %}
 {% import "partials.html" as ui %}
 
-{% block title %}TasteStream | Видео{% endblock %}
+{% block title %}Смак Друга | Відео{% endblock %}
 
 {% block content %}
-<section class="section-hero">
-  <p class="eyebrow">Видеораздел</p>
-  <h2>Видео-рецепты и ролики автора.</h2>
-  <p class="hero-text">Здесь собраны только видео. Если ролик загружен с сайта, он открывается прямо в карточке.</p>
+<section class="section-hero reveal">
+  <p class="eyebrow">Відео-кухня</p>
+  <h2>Короткі ролики й рецепти у форматі відео.</h2>
+  <p class="hero-text">Якщо друг захоче додати відео, вони будуть зібрані саме тут. Завантажені ролики можна дивитися прямо в картці.</p>
 </section>
 
-<section class="content-section">
+<section class="content-section reveal">
   <div class="post-grid">
     {% for post in posts %}
       {{ ui.render_post(post, "videos") }}
     {% else %}
-      <article class="empty-state">Видео пока нет, но раздел уже готов для новых роликов.</article>
+      <article class="empty-state">Відео ще немає, але розділ уже красиво підготовлений.</article>
     {% endfor %}
   </div>
 </section>
 {% endblock %}
-
