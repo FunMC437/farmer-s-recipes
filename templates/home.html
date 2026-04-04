@@ -1,49 +1,70 @@
 {% extends "base.html" %}
 {% import "partials.html" as ui %}
 
-{% block title %}TasteStream | Начало{% endblock %}
+{% block title %}Смак Друга | Головна{% endblock %}
 
 {% block content %}
-<section class="hero-card">
-  <span class="spotlight-pill">Домашняя кухня, фото и видео</span>
-  <h2>Красивый сайт, где друг выкладывает рецепты, а гости просто смотрят, лайкают и комментируют.</h2>
-  <p class="hero-text">Сверху теперь отдельные страницы. Автор работает через свою страницу, а обычные посетители спокойно листают и ставят реакции.</p>
-  <div class="hero-actions">
-    <a class="primary-button" href="{{ url_for('recipes') }}">Перейти к рецептам</a>
-    <a class="secondary-button" href="{{ url_for('videos') }}">Открыть видео</a>
+<section class="hero-card reveal">
+  <div class="hero-layout">
+    <div>
+      <span class="spotlight-pill">Рецепти, затишок і трохи магії на кухні</span>
+      <h2>Місце, де друг ділиться стравами, а гості красиво гортають, ставлять сердечка й пишуть добрі коментарі.</h2>
+      <p class="hero-text">Сайт повністю українською, без зайвих демо-рецептів і з чистими коментарями без матюків. Якщо автор десь помилиться, у нього є зручне виправлення запису та кнопка скасування.</p>
+      <div class="hero-actions">
+        <a class="primary-button" href="{{ url_for('recipes') }}">Дивитися рецепти</a>
+        <a class="secondary-button" href="{{ url_for('author') }}">Відкрити панель автора</a>
+      </div>
+    </div>
+
+    <aside class="fun-card">
+      <p class="feature-kicker">Прикольна фішка</p>
+      <h3>Кухонний настрій</h3>
+      <p class="hero-text" data-kitchen-note>Сьогодні пасує щось тепле, домашнє і з хрусткою скоринкою.</p>
+      <div class="mini-stats">
+        <div class="mini-stat">
+          <strong>{{ posts|length }}</strong>
+          <span>свіжі записи</span>
+        </div>
+        <div class="mini-stat">
+          <strong>100%</strong>
+          <span>українська атмосфера</span>
+        </div>
+      </div>
+    </aside>
   </div>
 </section>
 
 <section class="feature-grid">
-  <article class="feature-tile">
-    <p class="feature-kicker">Навигация</p>
-    <h3>Четкое верхнее меню</h3>
-    <p>Начало, рецепты, видео и автор теперь разделены на разные страницы, без перегруза внизу.</p>
+  <article class="feature-tile reveal">
+    <p class="feature-kicker">Листання</p>
+    <h3>Плавний перегляд карток</h3>
+    <p>Блоки м'яко з'являються під час прокрутки, а сама стрічка виглядає легше й охайніше.</p>
   </article>
-  <article class="feature-tile">
-    <p class="feature-kicker">Реакции</p>
-    <h3>Лайки и эмоции</h3>
-    <p>Гости могут оставлять реакции на публикации и обсуждать понравившиеся блюда.</p>
+  <article class="feature-tile reveal">
+    <p class="feature-kicker">Реакції</p>
+    <h3>Сердечко красиво прилітає</h3>
+    <p>Після натискання на сердечко з'являється коротка анімація, щоб сайт відчувався живішим.</p>
   </article>
-  <article class="feature-tile">
-    <p class="feature-kicker">Чистые комментарии</p>
-    <h3>Мат фильтруется</h3>
-    <p>Комментарии с грубыми словами не публикуются, чтобы страница выглядела аккуратно.</p>
+  <article class="feature-tile reveal">
+    <p class="feature-kicker">Коментарі</p>
+    <h3>Без матюків і зайвого шуму</h3>
+    <p>Коментарі проходять фільтр грубих слів, тому сторінка залишається приємною для перегляду.</p>
   </article>
 </section>
 
-<section class="content-section">
+<section class="content-section reveal">
   <div class="section-head">
     <div>
-      <p class="eyebrow">Последние публикации</p>
-      <h3>Свежее из ленты</h3>
+      <p class="eyebrow">Останні записи</p>
+      <h3>Свіже зі стрічки</h3>
     </div>
   </div>
   <div class="post-grid">
     {% for post in posts %}
       {{ ui.render_post(post, "home") }}
+    {% else %}
+      <article class="empty-state">Поки що тут тихо. Коли друг додасть перший рецепт, він з'явиться саме тут.</article>
     {% endfor %}
   </div>
 </section>
 {% endblock %}
-
