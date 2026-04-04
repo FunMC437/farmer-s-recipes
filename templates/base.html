@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}TasteStream{% endblock %}</title>
+  <title>{% block title %}Смак Друга{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
@@ -12,22 +12,23 @@
 <body>
   <div class="ambient ambient-left"></div>
   <div class="ambient ambient-right"></div>
+  <div class="grain-overlay"></div>
 
   <div class="page-shell">
-    <header class="top-header">
+    <header class="top-header reveal">
       <div class="brand-lockup">
-        <span class="brand-mark">TS</span>
+        <span class="brand-mark">SD</span>
         <div>
-          <p class="eyebrow">Recipe and video journal</p>
-          <h1>TasteStream</h1>
+          <p class="eyebrow">Домашні рецепти з настроєм</p>
+          <h1>Смак Друга</h1>
         </div>
       </div>
 
       <nav class="nav-pills">
-        <a class="nav-link {% if request.endpoint == 'home' %}is-current{% endif %}" href="{{ url_for('home') }}">Начало</a>
-        <a class="nav-link {% if request.endpoint == 'recipes' %}is-current{% endif %}" href="{{ url_for('recipes') }}">Рецепты</a>
-        <a class="nav-link {% if request.endpoint == 'videos' %}is-current{% endif %}" href="{{ url_for('videos') }}">Видео</a>
-        <a class="nav-link {% if request.endpoint == 'author' %}is-current{% endif %}" href="{{ url_for('author') }}">Автор</a>
+        <a class="nav-link {% if request.endpoint == 'home' %}is-current{% endif %}" href="{{ url_for('home') }}">Головна</a>
+        <a class="nav-link {% if request.endpoint == 'recipes' %}is-current{% endif %}" href="{{ url_for('recipes') }}">Рецепти</a>
+        <a class="nav-link {% if request.endpoint == 'videos' %}is-current{% endif %}" href="{{ url_for('videos') }}">Відео</a>
+        <a class="nav-link {% if request.endpoint == 'author' %}is-current{% endif %}" href="{{ url_for('author') }}">Для автора</a>
       </nav>
     </header>
 
@@ -47,4 +48,3 @@
   <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>
-
