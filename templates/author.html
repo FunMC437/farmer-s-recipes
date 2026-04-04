@@ -1,118 +1,108 @@
 {% extends "base.html" %}
 {% import "partials.html" as ui %}
 
-{% block title %}TasteStream | Автор{% endblock %}
+{% block title %}Смак Друга | Для автора{% endblock %}
 
 {% block content %}
 {% if is_author_logged_in %}
   <section class="author-layout">
-    <section class="panel author-panel">
+    <section class="panel author-panel reveal">
       <div class="panel-title-row">
         <div>
           <p class="eyebrow">Панель автора</p>
-          <h2>Новая публикация</h2>
+          <h2>{% if edit_post %}Виправлення запису{% else %}Новий запис{% endif %}</h2>
         </div>
         <form action="{{ url_for('logout') }}" method="post">
-          <button class="glass-button compact" type="submit">Выйти</button>
+          <button class="glass-button compact" type="submit">Вийти</button>
         </form>
       </div>
 
-      <form class="stacked-form" action="{{ url_for('create_post') }}" method="post" enctype="multipart/form-data">
+      <p class="hero-text">
+        {% if edit_post %}
+          Якщо щось у записі вийшло не так, виправ це тут. Якщо передумав змінювати, просто натисни «Скасувати».
+        {% else %}
+          Тут друг може додати новий рецепт або відео, а потім повернутися й спокійно все підправити.
+        {% endif %}
+      </p>
+
+      <form class="stacked-form" action="{% if edit_post %}{{ url_for('update_post', post_id=edit_post.id) }}{% else %}{{ url_for('create_post') }}{% endif %}" method="post" enctype="multipart/form-data">
         <label>
-          Заголовок
-          <input type="text" name="title" placeholder="Например: Крем-суп из тыквы" required>
+          Назва
+          <input type="text" name="title" placeholder="Наприклад: Крем-суп із гарбуза" value="{{ edit_post.title if edit_post else '' }}" required>
         </label>
         <label>
-          Категория
+          Категорія
           <select name="category">
-            <option value="recipe">Рецепт</option>
-            <option value="video">Видео</option>
+            <option value="recipe" {% if not edit_post or edit_post.category == 'recipe' %}selected{% endif %}>Рецепт</option>
+            <option value="video" {% if edit_post and edit_post.category == 'video' %}selected{% endif %}>Відео</option>
           </select>
         </label>
         <label>
-          Описание
-          <textarea name="description" rows="4" placeholder="Коротко опиши публикацию" required></textarea>
+          Опис
+          <textarea name="description" rows="4" placeholder="Коротко опиши страву або ролик" required>{{ edit_post.description if edit_post else '' }}</textarea>
         </label>
         <label>
-          Фото по ссылке
-          <input type="url" name="image_url" placeholder="https://...">
+          Фото за посиланням
+          <input type="url" name="image_url" placeholder="https://..." value="{{ edit_post.image_input_value if edit_post else '' }}">
         </label>
         <label>
-          Фото с компьютера
+          Фото з комп'ютера
           <input type="file" name="image_file" accept=".png,.jpg,.jpeg,.webp,.gif">
         </label>
         <label>
-          Видео по ссылке
-          <input type="url" name="video_url" placeholder="https://...">
+          Відео за посиланням
+          <input type="url" name="video_url" placeholder="https://..." value="{{ edit_post.video_input_value if edit_post else '' }}">
         </label>
         <label>
-          Видео с компьютера
+          Відео з комп'ютера
           <input type="file" name="video_file" accept=".mp4,.webm,.mov,.m4v">
         </label>
-        <button class="primary-button" type="submit">Опубликовать</button>
+
+        <div class="form-actions">
+          <button class="primary-button" type="submit">
+            {% if edit_post %}Зберегти виправлення{% else %}Опублікувати{% endif %}
+          </button>
+          {% if edit_post %}
+            <a class="glass-button" href="{{ url_for('author') }}">Скасувати</a>
+          {% endif %}
+        </div>
       </form>
     </section>
 
-    <section class="content-section">
+    <section class="content-section reveal">
       <div class="section-head">
         <div>
           <p class="eyebrow">Записи автора</p>
-          <h3>Все публикации</h3>
+          <h3>Усі публікації</h3>
         </div>
       </div>
       <div class="post-grid">
         {% for post in posts %}
           {{ ui.render_post(post, "author") }}
         {% else %}
-          <article class="empty-state">Пока публикаций нет. Добавь первую запись.</article>
+          <article class="empty-state">Публікацій поки немає. Додай перший рецепт і сайт одразу оживе.</article>
         {% endfor %}
       </div>
     </section>
   </section>
 {% else %}
   <section class="login-shell">
-    <article class="panel login-panel">
+    <article class="panel login-panel reveal">
       <p class="eyebrow">Доступ автора</p>
-      <div class="auth-switches">
-        <a class="nav-link {% if not register_mode %}is-current{% endif %}" href="{{ url_for('author') }}">Вход</a>
-        <a class="nav-link {% if register_mode %}is-current{% endif %}" href="{{ url_for('author', mode='register') }}">Регистрация</a>
-      </div>
-
-      {% if register_mode %}
-        <h2>Регистрация автора</h2>
-        <p class="hero-text">Эта форма только для автора. После регистрации новые почта и пароль сохранятся для входа в панель.</p>
-        <form class="stacked-form" action="{{ url_for('register_author') }}" method="post">
-          <label>
-            Почта
-            <input type="email" name="email" value="{{ current_email }}" required>
-          </label>
-          <label>
-            Пароль
-            <input type="password" name="password" required>
-          </label>
-          <label>
-            Повтори пароль
-            <input type="password" name="confirm_password" required>
-          </label>
-          <button class="primary-button" type="submit">Зарегистрировать автора</button>
-        </form>
-      {% else %}
-        <h2>Вход в панель публикаций</h2>
-        <p class="hero-text">Здесь автор входит по своей почте и паролю, а все действия по добавлению рецептов и видео открываются только после входа.</p>
-        <form class="stacked-form" action="{{ url_for('login') }}" method="post">
-          <label>
-            Почта
-            <input type="email" name="email" value="{{ current_email }}" required>
-          </label>
-          <label>
-            Пароль
-            <input type="password" name="password" required>
-          </label>
-          <button class="primary-button" type="submit">Войти</button>
-        </form>
-      {% endif %}
+      <h2>Вхід у панель автора</h2>
+      <p class="hero-text">Це закритий вхід тільки для власника сайту. Після входу відкриється форма для додавання, виправлення та видалення рецептів.</p>
+      <form class="stacked-form" action="{{ url_for('login') }}" method="post">
+        <label>
+          Пошта
+          <input type="email" name="email" value="{{ current_email }}" required>
+        </label>
+        <label>
+          Пароль
+          <input type="password" name="password" required>
+        </label>
+        <button class="primary-button" type="submit">Увійти</button>
+      </form>
     </article>
   </section>
 {% endif %}
 {% endblock %}
-
